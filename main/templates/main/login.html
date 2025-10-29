@@ -8,6 +8,6 @@
         {{ form.as_p }}
         <button type="submit" class="btn btn-primary">Войти</button>
     </form>
-    <p class="mt-2"><a href="{% url 'password_reset' %}">Забыли пароль?</a></p>
+    <p class="mt-2"><a href="{% url 'users:password_reset' %}">Забыли пароль?</a></p>
 </div>
 {% endblock %}

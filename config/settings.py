@@ -28,6 +28,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "main",
+    "users",
+    "mailings",
 
 ]
 
@@ -116,7 +118,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 LOGIN_REDIRECT_URL = "/"  # куда перенаправлять после входа
 LOGOUT_REDIRECT_URL = 'login'
 
-AUTH_USER_MODEL = 'main.CustomUser'
+AUTH_USER_MODEL = 'users.CustomUser'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
