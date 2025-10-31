@@ -1,6 +1,6 @@
 from django.views.generic import TemplateView, ListView, CreateView
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from .models import Recipient, Message
 from mailings.models import Mailing
 from .forms import RecipientForm, MessageForm
@@ -27,7 +27,10 @@ class RecipientListView(ListView):
     context_object_name = "recipients"
 
     def get_queryset(self):
-        return Recipient.objects.filter(author=self.request.user)
+        user = self.request.user
+        if user.role == 'manager':
+            return Recipient.objects.all()  # менеджер видит все
+        return Recipient.objects.filter(author=user) 
 
 
 class RecipientCreateView(CreateView):
@@ -53,14 +56,20 @@ class RecipientDeleteView(DeleteView):
     template_name = "main/recipient_confirm_delete.html"
     success_url = reverse_lazy("recipient_list")
 
+class RecipientDetailView(DetailView):
+    model = Recipient
+    template_name = 'recipients/recipient_detail.html'
+
 class MessageListView(ListView):
     model = Message
     template_name = "main/message_list.html"
     context_object_name = "messages"
 
     def get_queryset(self):
-        # Показываем только объекты текущего пользователя
-        return Message.objects.filter(author=self.request.user)
+        user = self.request.user
+        if user.is_authenticated and getattr(user, 'role', None) == 'manager':
+            return Message.objects.all()
+        return Message.objects.filter(author=user)
 
 
 class MessageCreateView(CreateView):
@@ -86,3 +95,7 @@ class MessageDeleteView(DeleteView):
     model = Message
     template_name = "main/message_confirm_delete.html"
     success_url = reverse_lazy("message_list")
+
+class MessageDetailView(DetailView):
+    model = Message
+    template_name = 'messages/message_detail.html'

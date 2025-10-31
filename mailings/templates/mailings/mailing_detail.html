@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ mailing.title }} — Детали рассылки{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">Детали рассылки</h2>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h4 class="card-title">{{ mailing.title }}</h4>
+
+            <p><strong>Автор:</strong> {{ mailing.author.email }}</p>
+            <p><strong>Статус:</strong> {{ mailing.get_status_display }}</p>
+            <p><strong>Активна:</strong> {{ mailing.is_active|yesno:"Да,Нет" }}</p>
+            <p><strong>Дата начала:</strong> {{ mailing.start_time|date:"d.m.Y H:i" }}</p>
+            <p><strong>Дата окончания:</strong> {{ mailing.end_time|date:"d.m.Y H:i" }}</p>
+
+            <hr>
+
+            <p><strong>Сообщение:</strong> {{ mailing.message.subject }}</p>
+            <p><strong>Текст:</strong> {{ mailing.message.body }}</p>
+
+            <p><strong>Получатели:</strong></p>
+            {% if mailing.recipients.all %}
+                <ul>
+                    {% for recipient in mailing.recipients.all %}
+                        <li>{{ recipient.name }} — {{ recipient.email }}</li>
+                    {% empty %}
+                        <li>Нет получателей</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>Нет получателей</p>
+            {% endif %}
+
+            <hr>
+            <div class="d-flex justify-content-between mt-3">
+                <a href="{% url 'mailing_list' %}" class="btn btn-secondary">← Назад к списку</a>
+                <div>
+                    <a href="{% url 'mailing_update' mailing.pk %}" class="btn btn-warning">Редактировать</a>
+                    <a href="{% url 'mailing_delete' mailing.pk %}" class="btn btn-danger">Удалить</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if mailing.attempts.all %}
+    <div class="mt-5">
+        <h4>История попыток отправки</h4>
+        <table class="table table-bordered mt-3">
+            <thead>
+                <tr>
+                    <th>Дата и время</th>
+                    <th>Статус</th>
+                    <th>Ответ сервера</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for attempt in mailing.attempts.all %}
+                <tr>
+                    <td>{{ attempt.timestamp|date:"d.m.Y H:i" }}</td>
+                    <td>{{ attempt.status }}</td>
+                    <td>{{ attempt.server_response|default:"—" }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="3" class="text-center">Попыток отправки нет</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

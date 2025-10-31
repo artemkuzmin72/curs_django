@@ -33,9 +33,9 @@
       <td>{{ m.message.subject }}</td>
       <td>{{ m.recipients.count }}</td>
       <td>
-        <a href="{% url 'mailing_update' m.pk %}" class="btn btn-sm btn-primary">Редактировать</a>
-        <a href="{% url 'mailing_delete' m.pk %}" class="btn btn-sm btn-danger">Удалить</a>
-        <a href="{% url 'mailing_send' m.pk %}" class="btn btn-sm btn-success">Отправить</a>
+        <a href="{% url 'mailings:mailing_update' m.pk %}">Редактировать</a>
+        <a href="{% url 'mailings:mailing_delete' m.pk %}">Удалить</a>
+        <a href="{% url 'mailings:mailing_detail' m.pk %}">Просмотр</a>
       </td>
     </tr>
     {% empty %}

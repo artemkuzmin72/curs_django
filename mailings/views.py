@@ -1,4 +1,4 @@
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.decorators import method_decorator
@@ -21,7 +21,6 @@ def mailing_detail(request, pk):
     return render(request, 'mailings/mailing_detail.html', {'mailing': mailing})
 
 
-@method_decorator(cache_page(60 * 15), name='dispatch')
 class MailingListView(LoginRequiredMixin, ListView):
     model = Mailing
     template_name = "mailings/mailing_list.html"
@@ -33,31 +32,37 @@ class MailingListView(LoginRequiredMixin, ListView):
             return Mailing.objects.all()  # менеджер видит все
         return Mailing.objects.filter(author=user)  # обычный пользователь видит только свои
 
-
-
 class MailingCreateView(LoginRequiredMixin, CreateView):
     model = Mailing
     form_class = MailingForm
     template_name = "mailings/mailing_create.html"
     success_url = reverse_lazy("mailings:mailing_list")
 
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
 
 class MailingUpdateView(UpdateView):
     model = Mailing
     form_class = MailingForm
     template_name = "mailings/mailing_form.html"
-    success_url = reverse_lazy("mailing_list")
+    success_url = reverse_lazy("mailings:mailing_list")
 
 
 class MailingDeleteView(DeleteView):
     model = Mailing
     template_name = "mailings/mailing_confirm_delete.html"
-    success_url = reverse_lazy("mailing_list")
+    success_url = reverse_lazy("mailings:mailing_list")
 
 class MailingAttemptListView(ListView):
     model = MailingAttempt
     template_name = "mailings/mailing_attempt_list.html"
     context_object_name = "attempts"
+
+class MailingDetailView(DetailView):
+    model = Mailing
+    template_name = 'mailings/mailing_detail.html'
 
 def send_mailing_view(request, pk):
     mailing = get_object_or_404(Mailing, pk=pk)
