@@ -37,7 +37,14 @@
 <div class="container mt-4 mb-4">
     <a href="{% url 'recipient_list' %}" class="btn btn-outline-primary me-2">Получатели</a>
     <a href="{% url 'message_list' %}" class="btn btn-outline-primary me-2">Сообщения</a>
-    <a href="{% url 'mailings:mailing_list' %}" class="btn btn-outline-primary">Рассылки</a>
+    <a href="{% url 'mailings:mailing_list' %}" class="btn btn-outline-primary me-2">Рассылки</a>
+    <a href="{% url 'mailings:mailing_attempt_list' %}" class="btn btn-outline-primary me-2">Попытки рассылок</a>
+
+    {% if user.role == 'manager' %}
+        <li class="nav-item">
+            <a href="{% url 'users:user_list' %}" class="btn btn-outline-primary me-2">Пользователи</a>
+        </li>
+    {% endif %}
 </div>
 {% endif %}
 

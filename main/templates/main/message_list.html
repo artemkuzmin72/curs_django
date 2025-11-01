@@ -20,6 +20,7 @@
       <td>{{ msg.body|truncatechars:100 }}</td>
       <td>
         <a href="{% url 'message_update' msg.pk %}" class="btn btn-sm btn-primary">Редактировать</a>
+        <a href="{% url 'message_detail' msg.pk %}" class="btn btn-sm btn-primary">Детали</a>
         <a href="{% url 'message_delete' msg.pk %}" class="btn btn-sm btn-danger">Удалить</a>
       </td>
     </tr>

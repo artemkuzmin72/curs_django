@@ -1,12 +1,13 @@
 from django.views.generic import TemplateView, CreateView
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http import HttpResponseForbidden
 from django.urls import reverse_lazy
 from django.contrib.auth import get_user_model
-
+from django.contrib import messages
+from users.models import CustomUser
 from mailings.models import MailingAttempt
 from .forms import RegisterForm
 
@@ -19,21 +20,17 @@ def user_list(request):
     if request.user.role != 'manager':
         return HttpResponseForbidden("Доступ запрещён")
     users = User.objects.all()
-    return render(request, 'main/user_list.html', {'users': users})
+    return render(request, 'users/user_list.html', {'users': users})
 
 
 # Блокировка / разблокировка пользователя (только менеджер)
-@login_required
+@user_passes_test(lambda u: u.is_authenticated and u.role == 'manager')
 def block_user(request, user_id):
-    if request.user.role != 'manager':
-        return HttpResponseForbidden("Доступ запрещён")
-
-    user = get_object_or_404(User, pk=user_id)
-    # Переключаем активность (True -> False, False -> True)
+    user = get_object_or_404(CustomUser, id=user_id)
     user.is_active = not user.is_active
     user.save()
-
-    return redirect('user_list')
+    messages.success(request, f"Пользователь {user.email} {'разблокирован' if user.is_active else 'заблокирован'}.")
+    return redirect('users:user_list')
 
 
 # Кэширование страницы статистики на 15 минут

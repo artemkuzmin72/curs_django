@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
-from main.models import Mailing
-from main.utils import send_mailing
+from mailings.models import Mailing
+from mailings.utils import send_mailing
 
 
 class Command(BaseCommand):

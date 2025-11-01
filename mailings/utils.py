@@ -15,6 +15,9 @@ def send_mailing(mailing):
     mailing.status = "started"
     mailing.save(update_fields=["status"])
 
+    success_count = 0
+    fail_count = 0
+
     for recipient in recipients:
         try:
             send_mail(
@@ -28,16 +31,21 @@ def send_mailing(mailing):
             MailingAttempt.objects.create(
                 mailing=mailing,
                 recipient=recipient,
-                status="success",
+                status="Успешно",
                 server_response="Отправлено успешно"
             )
+            success_count += 1
         except Exception as e:
             # запись неуспешной попытки
             MailingAttempt.objects.create(
                 mailing=mailing,
                 recipient=recipient,
-                status="failed",
+                status="Не успешно",
                 server_response=str(e)
             )
+            fail_count += 1
 
-    return f"Рассылка '{mailing.title}' завершена. Попыток: {recipients.count()}"
+    mailing.status = "finished"
+    mailing.save(update_fields=["status"])
+
+    return f"Рассылка '{mailing.title}' завершена. Успешно: {success_count}, Неудачно: {fail_count}"

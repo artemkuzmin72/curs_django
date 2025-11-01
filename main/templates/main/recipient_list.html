@@ -23,6 +23,7 @@
       <td>{{ r.comment }}</td>
       <td>
         <a href="{% url 'recipient_update' r.pk %}" class="btn btn-sm btn-primary">Редактировать</a>
+        <a href="{% url 'recipient_detail' r.pk %}" class="btn btn-sm btn-primary">Детали</a>
         <a href="{% url 'recipient_delete' r.pk %}" class="btn btn-sm btn-danger">Удалить</a>
       </td>
     </tr>

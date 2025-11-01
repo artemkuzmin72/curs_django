@@ -58,7 +58,7 @@ class RecipientDeleteView(DeleteView):
 
 class RecipientDetailView(DetailView):
     model = Recipient
-    template_name = 'recipients/recipient_detail.html'
+    template_name = 'main/recipient_detail.html'
 
 class MessageListView(ListView):
     model = Message
@@ -98,4 +98,4 @@ class MessageDeleteView(DeleteView):
 
 class MessageDetailView(DetailView):
     model = Message
-    template_name = 'messages/message_detail.html'
+    template_name = 'main/message_detail.html'

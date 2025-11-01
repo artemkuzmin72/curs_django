@@ -55,10 +55,11 @@ class MailingDeleteView(DeleteView):
     template_name = "mailings/mailing_confirm_delete.html"
     success_url = reverse_lazy("mailings:mailing_list")
 
-class MailingAttemptListView(ListView):
+class MailingAttemptListView(ListView, LoginRequiredMixin):
     model = MailingAttempt
     template_name = "mailings/mailing_attempt_list.html"
     context_object_name = "attempts"
+    ordering = ["-timestamp"]
 
 class MailingDetailView(DetailView):
     model = Mailing
@@ -68,4 +69,4 @@ def send_mailing_view(request, pk):
     mailing = get_object_or_404(Mailing, pk=pk)
     result = send_mailing(mailing)
     messages.success(request, result)
-    return redirect("mailing_list")
+    return redirect("mailings:mailing_list")

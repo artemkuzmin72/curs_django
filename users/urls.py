@@ -20,6 +20,6 @@ urlpatterns = [
          auth_views.PasswordResetCompleteView.as_view(template_name="users/password_reset_complete.html"), 
          name="password_reset_complete"),
     path("stats/", views.UserStatsView.as_view(), name="user_stats"),
-    path('users/', views.user_list, name='user_list'),
+    path('', views.user_list, name='user_list'),
     path('users/block/<int:user_id>/', views.block_user, name='block_user'),
 ]

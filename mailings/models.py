@@ -47,6 +47,12 @@ class MailingAttempt(models.Model):
         related_name="attempts",
         verbose_name="Рассылка"
     )
+    recipient = models.ForeignKey(  
+        "main.Recipient",
+        on_delete=models.CASCADE,
+        related_name="attempts",
+        verbose_name="Получатель"
+    )
     timestamp = models.DateTimeField(
         auto_now_add=True,
         verbose_name="Дата и время попытки"
