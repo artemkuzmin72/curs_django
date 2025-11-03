@@ -1,0 +1,41 @@
+{% extends "main/base.html" %}
+{% block title %}Главная{% endblock %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+<h2 class="mb-4">Статистика рассылок</h2>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card text-white bg-primary mb-3 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Всего рассылок</h5>
+                <p class="card-text fs-3">{{ total_mailings }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-info mb-3 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Активные рассылки</h5>
+                <p class="card-text fs-3">{{ active_mailings }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-white bg-success mb-3 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Уникальные получатели</h5>
+                <p class="card-text fs-3">{{ unique_recipients }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="text-center mt-5">
+    <h3>Добро пожаловать! Пожалуйста, войдите или зарегистрируйтесь, чтобы управлять рассылками.</h3>
+</div>
+{% endif %}
+
+{% endblock %}

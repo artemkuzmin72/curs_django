@@ -1,0 +1,32 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block title %}{{ recipient.full_name }} — Детали получателя{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="mb-4 text-center">Детали получателя</h2>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h4 class="card-title">{{ recipient.full_name }}</h4>
+            <p><strong>Email:</strong> {{ recipient.email }}</p>
+            <p><strong>Автор:</strong> {{ recipient.author.email }}</p>
+            {% if recipient.comment %}
+                <p><strong>Комментарий:</strong> {{ recipient.comment }}</p>
+            {% else %}
+                <p><strong>Комментарий:</strong> —</p>
+            {% endif %}
+
+            <hr>
+            <div class="d-flex justify-content-between mt-3">
+                <a href="{% url 'recipient_list' %}" class="btn btn-secondary">← Назад к списку</a>
+                <div>
+                    <a href="{% url 'recipient_update' recipient.pk %}" class="btn btn-warning">Редактировать</a>
+                    <a href="{% url 'recipient_delete' recipient.pk %}" class="btn btn-danger">Удалить</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
